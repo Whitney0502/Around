@@ -1,21 +1,33 @@
-import React, { Component } from 'react';
-import logo from '../assets/images/logo.svg';
+import React from 'react';
+import { Header } from './Header';
+import { Main } from './Main';
+import {TOKEN_KEY} from "../constants";
+
 import '../styles/App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+class App extends React.Component {
+    state = {
+        isLoggedIn: !!localStorage.getItem(TOKEN_KEY)
+    }
+
+    handleLogin = (response) => {
+        this.setState({isLoggedIn: true});
+        localStorage.setItem(TOKEN_KEY, response);
+    }
+
+    handleLogout = () => {
+        this.setState({isLoggedIn: false});
+        localStorage.removeItem(TOKEN_KEY);
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <Header isLoggedIn={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
+                <Main isLoggedIn={this.state.isLoggedIn} handleLogin={this.handleLogin}/>
+            </div>
+        );
+    }
 }
 
 export default App;
